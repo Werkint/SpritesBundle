@@ -10,8 +10,8 @@
         }
     ],
     "require":     {
-        "werkint/webapp": "*",
-        "php":            ">=5.4"
+        "werkint/webapp-bundle": "*",
+        "php":                   ">=5.4"
     },
     "target-dir":  "Werkint/Bundle/SpritesBundle",
     "autoload":    {
