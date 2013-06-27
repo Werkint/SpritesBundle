@@ -1,0 +1,22 @@
+{
+    "name":        "werkint/sprites-bundle",
+    "type":        "library",
+    "description": "Sprites module",
+    "license":     "GPL",
+    "authors":     [
+        {
+            "name":  "Bogdan Yurov",
+            "email": "bogdan@yurov.me"
+        }
+    ],
+    "require":     {
+        "werkint/webapp": "*",
+        "php":            ">=5.4"
+    },
+    "target-dir":  "Werkint/Bundle/SpritesBundle",
+    "autoload":    {
+        "psr-0": {
+            "Werkint\\Bundle\\SpritesBundle": ""
+        }
+    }
+}

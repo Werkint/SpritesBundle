@@ -1,0 +1,16 @@
+@mixin sprites-icon-chunk($class: "", $total: 0, $pos: 0) {
+  $pos = 100 / ($total - 1) * $pos;
+  $pos = "#{$pos}%";
+  &.#{$class} {
+    background-position: 0 #{$pos};
+  }
+}
+@mixin sprites-icon-general-full($filename) {
+  display: inline-block;
+  background: url("#{$filename}") no-repeat transparent;
+  background-size: 100% auto;
+}
+@mixin sprites-icon-general($filename) {
+  @include sprites-icon-general-full("#{$const-sprites-path}/#{$filename}.png");
+}
+/*[[THEDATA]]*/

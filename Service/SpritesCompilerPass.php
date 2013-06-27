@@ -1,0 +1,26 @@
+<?php
+namespace Werkint\Bundle\SpritesBundle\Service;
+
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
+
+class SpritesCompilerPass implements CompilerPassInterface
+{
+    public function process(ContainerBuilder $container)
+    {
+        if (false === $container->hasDefinition('werkint.sprites.service')) {
+            return;
+        }
+
+        $definition = $container->getDefinition('werkint.sprites.service');
+
+        $list = $container->findTaggedServiceIds('werkint.sprites.provider');
+        foreach ($list as $id => $attributes) {
+            $definition->addMethodCall(
+                'addProvider', [new Reference($id)]
+            );
+        }
+    }
+
+}
