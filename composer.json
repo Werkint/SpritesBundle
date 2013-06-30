@@ -9,6 +9,7 @@
             "email": "bogdan@yurov.me"
         }
     ],
+    "version":     "1.0.0",
     "require":     {
         "werkint/webapp-bundle": "*",
         "php":                   ">=5.4"
