@@ -9,11 +9,11 @@ class SpritesCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (false === $container->hasDefinition('werkint.sprites.service')) {
+        if (false === $container->hasDefinition('werkint.sprites')) {
             return;
         }
 
-        $definition = $container->getDefinition('werkint.sprites.service');
+        $definition = $container->getDefinition('werkint.sprites');
 
         $list = $container->findTaggedServiceIds('werkint.sprites.provider');
         foreach ($list as $id => $attributes) {
