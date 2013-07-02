@@ -1,36 +1,73 @@
 <?php
 namespace Werkint\Bundle\SpritesBundle\Service;
 
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
+
+/**
+ * Sprites.
+ *
+ * @author Bogdan Yurov <bogdan@yurov.me>
+ */
 class Sprites
 {
+    // Transparent padding around images
+    const BORDER_WIDTH = 5;
+    // String to replace in the template
+    const TEMPLATE_NEEDLE = '/*[[THEDATA]]*/';
+    // Prefix for separate images
+    const PREFIX_ICON = 'sprites-icon-';
+    // Prefix for each sprite's mixin
+    const PREFIX_SPRITE = 'sprite-';
+    // Prefix for the whole thing
+    const NAMESPACE_NAME = 'const-sprites-namespace';
+    // Should we create global classes for mixins?
+    const CREATE_CLASSES = true;
+
+    /**
+     * Path to the template
+     * @var string $template
+     */
     protected $template;
+    /**
+     * Directory to save sprites
+     * @var string $imgDir
+     */
     protected $imgDir;
+    /**
+     * Path to images for SCSS mixins
+     * @var string $imgPath
+     */
     protected $imgPath;
+    /**
+     * Where SCSS mixins should be saved
+     * @var string $stylePath
+     */
     protected $stylePath;
 
     public function __construct(
         array $params,
-        $scriptsDir
+        $template
     ) {
-        $this->template = $scriptsDir . '/spritesTemplate.scss';
+        $this->template = $template;
         $this->imgDir = $params['dir'];
         $this->imgPath = $params['path'];
         $this->stylePath = $params['styles'];
     }
 
+    /**
+     * Returns list of size-bindings for sprites
+     * @return array
+     */
     protected function getSizes()
     {
-        // STUB
         return [];
     }
 
-    protected $providers = [];
-
-    public function addProvider(ProviderInterface $provider)
-    {
-        $this->providers[] = $provider;
-    }
-
+    /**
+     * Returns list of images to merge
+     * @return array
+     */
     public function getList()
     {
         $data = [];
@@ -44,85 +81,133 @@ class Sprites
         return $data;
     }
 
+    /**
+     * Compiles all sprites
+     * @return int Number of images merged
+     */
     public function compile()
     {
-        $this->clearCache();
+        // Path prefix
+        $prefix = $this->getNewPrefix();
+        // List of images
         $data = $this->getList();
+        // Sizes of images
+        $sizes = $this->getSizes();
+
         $num = 0;
         $scss = [];
-        $sizes = $this->getSizes();
         foreach ($data as $name => $list) {
+            // Sprite size
+            $size = isset($sizes[$name]) ? $sizes[$name] : 100;
+            $scss[] = $this->compileFile($prefix, $name, $list, $size);
             $num += count($list);
-            $scss[] = $this->compileFile($name, $list, $sizes[$name]);
         }
+
+        // Populating template
         $template = file_get_contents($this->template);
         $scss = str_replace(
-            '/*[[THEDATA]]*/', join("\n", $scss), $template
+            static::TEMPLATE_NEEDLE, join("\n", $scss), $template
         );
-        foreach ($data as $name => $list) {
-            $scss .= '.#{$const-sprites-namespace}-' . $name . ' {' . "\n";
-            $scss .= '@include sprite-' . $name . ';' . "\n";
-            $scss .= '};' . "\n";
+
+        // Creating global classes
+        if (static::CREATE_CLASSES) {
+            foreach ($data as $name => $list) {
+                $scss .= '.#{$' . static::NAMESPACE_NAME . '}-' . $name . ' {' . "\n";
+                $scss .= '@include ' . static::PREFIX_SPRITE . $name . ';' . "\n";
+                $scss .= '};' . "\n";
+            }
         }
+
+        // Writing the file
         file_put_contents($this->stylePath, $scss);
 
         return $num;
     }
 
     /**
-     * Компилирует спрайт
-     * @param  string $name Имя файла/класс для спрайта
-     * @param  array  $list Список изображений
-     * @param  int    $size Ширина спрайта
+     * Compiles sprite
+     * @param  string $prefix Path prefix
+     * @param  string $name   Filename/class for sprite
+     * @param  array  $list   Image list
+     * @param  int    $size   Sprite width
      * @return string
      */
-    protected function compileFile($name, array $list, $size = 100)
+    protected function compileFile($prefix, $name, array $list, $size)
     {
+        // Sprite path
+        $fname = $prefix . '/' . $name;
+        // Tile border and size
+        $border = static::BORDER_WIDTH;
+        $tileSize = $size - $border * 2;
+        // Amount of tiles
         $count = count($list);
-        $img = imagecreatetruecolor($size, $size * $count);
-        imagealphablending($img, false);
-        imagesavealpha($img, true);
-        imagefilledrectangle(
-            $img, 0, 0, $size, $size * $count,
-            imagecolorallocatealpha($img, 255, 255, 255, 127)
-        );
-        $fname = $name . '_' . substr(sha1($name . microtime(true)), 0, 10);
 
+        // Sprite image
+        $img = new \Imagick();
+        $img->newImage($size, $size * $count, 'transparent', 'png');
+
+        // SCSS Header
         $scss = [];
-        $scss[] = '@mixin sprite-' . $name . ' {';
-        $scss[] = '@include sprites-icon-general(\'' . $fname . '\');';
+        $scss[] = '@mixin ' . static::PREFIX_SPRITE . $name . ' {';
+        $scss[] = '@include ' . static::PREFIX_ICON . 'general(\'' . $fname . '\');';
+
+        // Merging images
         $num = 0;
         foreach ($list as $class => $imgname) {
-            $tile = imagecreatefrompng($imgname);
-            imagealphablending($tile, true);
-            imagecopyresampled(
-                $img, $tile, 0, $num * $size, 0, 0,
-                $size, $size, imagesx($tile), imagesy($tile)
+            $tile = new \Imagick($imgname);
+            $tile->resizeimage($tileSize, $tileSize, \Imagick::FILTER_CUBIC, 0.9);
+
+            // We add each image to the sprite with a border
+            $img->compositeimage(
+                $tile,
+                \Imagick::COMPOSITE_ADD,
+                $border, $num * $size + $border
             );
-            imagedestroy($tile);
-            $scss[] = '@include sprites-icon-chunk(\'' . $class . '\', ' . $count . ', ' . $num . ');';
+
+            $scss[] = '@include ' . static::PREFIX_ICON . 'chunk(\'' . $class . '\', ' . $count . ', ' . $num . ');';
             $num++;
         }
+
+        // SCSS Footer
         $scss[] = '}';
         $scss = join("\n", $scss);
 
+        // Writing image
         $filename = $this->imgDir . '/' . $fname . '.png';
-        imagepng($img, $filename);
-        imagedestroy($img);
+        file_put_contents(
+            $filename, $img->getimageblob()
+        );
 
         return $scss;
     }
 
-    protected function clearCache()
+    /**
+     * Creates new prefix for sprites
+     * @return string
+     */
+    protected function getNewPrefix()
     {
-        $dir = opendir($this->imgDir);
-        while ($file = readdir($dir)) {
-            if (substr($file, 0, 1) == '.') {
-                continue;
-            }
-            if (is_file($this->imgDir . '/' . $file)) {
-                unlink($this->imgDir . '/' . $file);
-            }
-        }
+        // Removing old sprites
+        $find = new Finder();
+        $fs = new Filesystem();
+        $fs->remove(
+            $find->in($this->imgDir)->directories(),
+            $this->stylePath
+        );
+
+        // New prefix
+        $prefix = substr(sha1(microtime(true) . 'sprites'), 1, 10);
+        $fs->mkdir($this->imgDir . '/' . $prefix);
+
+        return $prefix;
+    }
+
+    // -- Providers ---------------------------------------
+
+    protected $providers = [];
+
+    public function addProvider(ProviderInterface $provider)
+    {
+        $this->providers[] = $provider;
     }
 }

@@ -5,6 +5,11 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * SpritesCompilerPass.
+ *
+ * @author Bogdan Yurov <bogdan@yurov.me>
+ */
 class SpritesCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)

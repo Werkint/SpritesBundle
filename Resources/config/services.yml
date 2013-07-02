@@ -3,4 +3,4 @@ services:
         class: Werkint\Bundle\SpritesBundle\Service\Sprites
         arguments:
             - %werkint_sprites%
-            - %werkint_sprites_scripts%
+            - %werkint_sprites_template%

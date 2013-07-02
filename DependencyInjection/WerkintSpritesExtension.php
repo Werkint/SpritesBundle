@@ -7,10 +7,17 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
+/**
+ * WerkintSpritesExtension.
+ *
+ * @author Bogdan Yurov <bogdan@yurov.me>
+ */
 class WerkintSpritesExtension extends Extension
 {
-    public function load(array $configs, ContainerBuilder $container)
-    {
+    public function load(
+        array $configs,
+        ContainerBuilder $container
+    ) {
         $processor = new Processor();
         $config = $processor->processConfiguration(
             new Configuration($this->getAlias()),
@@ -21,8 +28,8 @@ class WerkintSpritesExtension extends Extension
             $config
         );
         $container->setParameter(
-            $this->getAlias() . '_scripts',
-            __DIR__ . '/../Resources/scripts'
+            $this->getAlias() . '_template',
+            __DIR__ . '/../Resources/scripts/spritesTemplate.scss'
         );
         $loader = new YamlFileLoader(
             $container,

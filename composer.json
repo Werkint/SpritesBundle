@@ -10,6 +10,8 @@
         }
     ],
     "require":     {
+        "symfony/filesystem":    "*",
+        "symfony/finder":        "*",
         "werkint/webapp-bundle": "*",
         "php":                   ">=5.4"
     },
