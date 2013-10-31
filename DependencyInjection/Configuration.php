@@ -29,6 +29,7 @@ class Configuration implements
             ->scalarNode('dir')->end()
             ->scalarNode('path')->end()
             ->scalarNode('styles')->end()
+            ->scalarNode('namespace')->defaultValue('global-sprite')->end()
             ->scalarNode('defaultsize')->defaultValue('100')->end();
         $rootNode
             ->arrayNode('sizes')

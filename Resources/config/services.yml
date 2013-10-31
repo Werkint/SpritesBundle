@@ -1,4 +1,12 @@
 services:
+    # Обработчики
+    werkint.sprites.controller:
+        class: Werkint\Bundle\SpritesBundle\EventListener\ControllerLoader
+        arguments:
+            - @service_container
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: initController }
+
     werkint.sprites:
         class: Werkint\Bundle\SpritesBundle\Service\Sprites
         arguments:
@@ -10,3 +18,10 @@ services:
             - @werkint.sprites
         tags:
             - { name: werkint.compile.provider, class: werkint.sprites }
+    # Twig
+    werkint.sprites.twigappextension:
+        class: Werkint\Bundle\SpritesBundle\Service\TwigExtension
+        arguments:
+            - @service_container
+        tags:
+            - { name: twig.extension }

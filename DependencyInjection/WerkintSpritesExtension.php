@@ -28,6 +28,10 @@ class WerkintSpritesExtension extends Extension
             $config
         );
         $container->setParameter(
+            $this->getAlias() . '_namespace',
+            $config['namespace']
+        );
+        $container->setParameter(
             $this->getAlias() . '_template',
             __DIR__ . '/../Resources/scripts/spritesTemplate.scss'
         );

@@ -10,12 +10,15 @@
         }
     ],
     "require":     {
-        "symfony/filesystem":     "*",
-        "symfony/finder":         "*",
-        "werkint/webapp-bundle":  "*",
-        "werkint/command-bundle": "*",
+        "symfony/filesystem": "*",
+        "symfony/finder":     "*",
 
         "php": ">=5.4"
+    },
+    "suggest":     {
+        "werkint/webapp-bundle":  "Automatic sprites-mixins file include",
+        "werkint/command-bundle": "Support of werkint:compile command",
+        "twig/twig":              "Twig function for sprites display"
     },
     "target-dir":  "Werkint/Bundle/SpritesBundle",
     "autoload":    {

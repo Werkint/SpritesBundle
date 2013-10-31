@@ -117,7 +117,8 @@ class Sprites
         // Creating global classes
         if (static::CREATE_CLASSES) {
             foreach ($data as $name => $list) {
-                $scss .= '.#{$' . static::NAMESPACE_NAME . '}-' . $name . ' {' . "\n";
+                $scss .= '.#{$' . static::NAMESPACE_NAME . '}';
+                $scss .= ', .#{$' . static::NAMESPACE_NAME . '}-' . $name . ' {' . "\n";
                 $scss .= '@include ' . static::PREFIX_SPRITE . $name . ';' . "\n";
                 $scss .= '};' . "\n";
             }

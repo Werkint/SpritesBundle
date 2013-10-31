@@ -13,4 +13,9 @@
 @mixin sprites-icon-general($filename) {
   @include sprites-icon-general-full("#{$const-sprites-path}/#{$filename}.png");
 }
+.#{$const-sprites-namespace} {
+  height: 1.2em;
+  width: 1.2em;
+  text-indent: -99999em;
+}
 /*[[THEDATA]]*/
