@@ -45,6 +45,10 @@ class Sprites
      */
     protected $stylePath;
 
+    // sizes
+    protected $sizeDefault;
+    protected $sizes;
+
     public function __construct(
         array $params,
         $template
@@ -53,15 +57,18 @@ class Sprites
         $this->imgDir = $params['dir'];
         $this->imgPath = $params['path'];
         $this->stylePath = $params['styles'];
+        $this->sizeDefault = $params['defaultsize'];
+        $this->sizes = $params['sizes'];
     }
 
     /**
-     * Returns list of size-bindings for sprites
-     * @return array
+     * Returns size
+     * @param string $name
+     * @return int
      */
-    protected function getSizes()
+    protected function getSize($name)
     {
-        return [];
+        return isset($this->sizes[$name]) ? $this->sizes[$name] : $this->sizeDefault;
     }
 
     /**
@@ -91,14 +98,12 @@ class Sprites
         $prefix = $this->getNewPrefix();
         // List of images
         $data = $this->getList();
-        // Sizes of images
-        $sizes = $this->getSizes();
 
         $num = 0;
         $scss = [];
         foreach ($data as $name => $list) {
             // Sprite size
-            $size = isset($sizes[$name]) ? $sizes[$name] : 100;
+            $size = $this->getSize($name);
             $scss[] = $this->compileFile($prefix, $name, $list, $size);
             $num += count($list);
         }

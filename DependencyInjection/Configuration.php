@@ -28,7 +28,14 @@ class Configuration implements
         $rootNode
             ->scalarNode('dir')->end()
             ->scalarNode('path')->end()
-            ->scalarNode('styles')->end();
+            ->scalarNode('styles')->end()
+            ->scalarNode('defaultsize')->defaultValue('100')->end();
+        $rootNode
+            ->arrayNode('sizes')
+            ->useAttributeAsKey('name')
+            ->prototype('scalar')
+            ->end()
+            ->end();
 
         $rootNode->end();
         return $treeBuilder;

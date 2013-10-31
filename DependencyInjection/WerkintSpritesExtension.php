@@ -37,9 +37,4 @@ class WerkintSpritesExtension extends Extension
         );
         $loader->load('services.yml');
     }
-
-    public function getAlias()
-    {
-        return 'werkint_sprites';
-    }
 }

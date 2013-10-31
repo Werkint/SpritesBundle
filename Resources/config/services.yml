@@ -4,3 +4,9 @@ services:
         arguments:
             - %werkint_sprites%
             - %werkint_sprites_template%
+    werkint.sprites.compileprovider:
+        class: Werkint\Bundle\SpritesBundle\Service\CompileProvider
+        arguments:
+            - @werkint.sprites
+        tags:
+            - { name: werkint.compile.provider, class: werkint.sprites }
