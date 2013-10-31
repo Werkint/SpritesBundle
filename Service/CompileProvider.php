@@ -18,7 +18,7 @@ class CompileProvider implements
 
     public function process(
         OutputInterface $out,
-        ContainerAwareCommand $command
+        ContainerAwareCommand $command = null
     ) {
         $num = $this->service->compile();
         $out->writeln($num . ' images merged');
