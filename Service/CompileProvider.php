@@ -3,7 +3,7 @@ namespace Werkint\Bundle\SpritesBundle\Service;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Output\OutputInterface;
-use Werkint\Bundle\CommandBundle\Service\Compile\CompileProviderInterface;
+use Werkint\Bundle\CommandBundle\Service\Contract\CompileProviderInterface;
 
 /**
  * CompileProvider.
@@ -21,6 +21,9 @@ class CompileProvider implements
         $this->service = $service;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function process(
         OutputInterface $out,
         ContainerAwareCommand $command = null
