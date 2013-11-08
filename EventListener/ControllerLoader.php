@@ -5,6 +5,11 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
+/**
+ * ControllerLoader.
+ *
+ * @author Bogdan Yurov <bogdan@yurov.me>
+ */
 class ControllerLoader
 {
     // -- Services ---------------------------------------

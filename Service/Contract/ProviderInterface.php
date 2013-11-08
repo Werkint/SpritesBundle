@@ -1,5 +1,5 @@
 <?php
-namespace Werkint\Bundle\SpritesBundle\Service;
+namespace Werkint\Bundle\SpritesBundle\Service\Contract;
 
 /**
  * ProviderInterface.

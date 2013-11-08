@@ -23,6 +23,9 @@ class WerkintSpritesExtension extends Extension
             new Configuration($this->getAlias()),
             $configs
         );
+        if (!$config['sizes']) {
+            $config['sizes'] = [];
+        }
         $container->setParameter(
             $this->getAlias(),
             $config
@@ -41,4 +44,5 @@ class WerkintSpritesExtension extends Extension
         );
         $loader->load('services.yml');
     }
+
 }

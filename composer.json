@@ -1,8 +1,7 @@
 {
     "name":        "werkint/sprites-bundle",
-    "type":        "library",
     "description": "Sprites module",
-    "license":     "GPL",
+    "license":     "GPL-3.0+",
     "authors":     [
         {
             "name":  "Bogdan Yurov",
@@ -12,6 +11,8 @@
     "require":     {
         "symfony/filesystem": "*",
         "symfony/finder":     "*",
+
+        "ext-imagick": "*",
 
         "php": ">=5.4"
     },

@@ -3,6 +3,8 @@ namespace Werkint\Bundle\SpritesBundle\Service;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Werkint\Bundle\SpritesBundle\Service\Contract\ProviderInterface;
+use Werkint\Bundle\SpritesBundle\Service\Contract\SizeProviderInterface;
 
 /**
  * Sprites.
@@ -63,12 +65,22 @@ class Sprites
 
     /**
      * Returns size
-     * @param string $name
+     * @param string   $name
+     * @param int|null $default
+     * @throws \Exception
      * @return int
      */
-    protected function getSize($name)
+    protected function getSize($name, $default = null)
     {
-        return isset($this->sizes[$name]) ? $this->sizes[$name] : $this->sizeDefault;
+        if (!$default) {
+            $default = $this->sizeDefault;
+        }
+        $size = isset($this->sizes[$name]) ? $this->sizes[$name] : $default;
+        if (!$size) {
+            throw new \Exception('Wrong size of ' . $name);
+        }
+
+        return $size;
     }
 
     /**
@@ -99,11 +111,20 @@ class Sprites
         // List of images
         $data = $this->getList();
 
+        // sizes
+        $sizes = [];
+        foreach ($this->providers as $provider) {
+            if ($provider instanceof SizeProviderInterface) {
+                $sizes = array_merge($sizes, $provider->getSizes());
+            }
+        }
+        $sizes = array_combine($sizes, $sizes);
+
         $num = 0;
         $scss = [];
         foreach ($data as $name => $list) {
             // Sprite size
-            $size = $this->getSize($name);
+            $size = $this->getSize($name, !isset($sizes[$name]) ? null : $sizes[$name]);
             $scss[] = $this->compileFile($prefix, $name, $list, $size);
             $num += count($list);
         }

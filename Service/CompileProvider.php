@@ -5,6 +5,11 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use Werkint\Bundle\CommandBundle\Service\Compile\CompileProviderInterface;
 
+/**
+ * CompileProvider.
+ *
+ * @author Bogdan Yurov <bogdan@yurov.me>
+ */
 class CompileProvider implements
     CompileProviderInterface
 {

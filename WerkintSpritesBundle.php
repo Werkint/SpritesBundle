@@ -1,8 +1,8 @@
 <?php
 namespace Werkint\Bundle\SpritesBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Werkint\Bundle\SpritesBundle\Service\SpritesCompilerPass;
 
 /**
