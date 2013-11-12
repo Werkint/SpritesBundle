@@ -14,6 +14,9 @@ class TwigExtension extends AbstractExtension
 {
     const EXT_NAME = 'werkint_sprites';
 
+    /**
+     * @param ContainerInterface $cont
+     */
     public function __construct(
         ContainerInterface $cont
     ) {

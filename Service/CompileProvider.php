@@ -15,6 +15,9 @@ class CompileProvider implements
 {
     protected $service;
 
+    /**
+     * @param Sprites $service
+     */
     public function __construct(
         Sprites $service
     ) {

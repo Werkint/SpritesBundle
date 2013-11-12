@@ -1,6 +1,7 @@
 <?php
 namespace Werkint\Bundle\SpritesBundle\Service;
 
+use Gregwar\Image\Image;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Werkint\Bundle\SpritesBundle\Service\Contract\ProviderInterface;
@@ -28,21 +29,25 @@ class Sprites
 
     /**
      * Path to the template
+     *
      * @var string $template
      */
     protected $template;
     /**
      * Directory to save sprites
+     *
      * @var string $imgDir
      */
     protected $imgDir;
     /**
      * Path to images for SCSS mixins
+     *
      * @var string $imgPath
      */
     protected $imgPath;
     /**
      * Where SCSS mixins should be saved
+     *
      * @var string $stylePath
      */
     protected $stylePath;
@@ -51,6 +56,10 @@ class Sprites
     protected $sizeDefault;
     protected $sizes;
 
+    /**
+     * @param array  $params
+     * @param string $template
+     */
     public function __construct(
         array $params,
         $template
@@ -65,6 +74,7 @@ class Sprites
 
     /**
      * Returns size
+     *
      * @param string   $name
      * @param int|null $default
      * @throws \Exception
@@ -85,6 +95,7 @@ class Sprites
 
     /**
      * Returns list of images to merge
+     *
      * @return array
      */
     public function getList()
@@ -102,6 +113,7 @@ class Sprites
 
     /**
      * Compiles all sprites
+     *
      * @return int Number of images merged
      */
     public function compile()
@@ -153,6 +165,7 @@ class Sprites
 
     /**
      * Compiles sprite
+     *
      * @param  string $prefix Path prefix
      * @param  string $name   Filename/class for sprite
      * @param  array  $list   Image list
@@ -170,8 +183,7 @@ class Sprites
         $count = count($list);
 
         // Sprite image
-        $img = new \Imagick();
-        $img->newImage($size, $size * $count, 'transparent', 'png');
+        $img = new Image(null, $size, $size * $count);
 
         // SCSS Header
         $scss = [];
@@ -181,14 +193,14 @@ class Sprites
         // Merging images
         $num = 0;
         foreach ($list as $class => $imgname) {
-            $tile = new \Imagick($imgname);
-            $tile->resizeimage($tileSize, $tileSize, \Imagick::FILTER_CUBIC, 0.9);
+            $tile = Image::open($imgname);
+            $tile->forceResize($tileSize, $tileSize);
 
             // We add each image to the sprite with a border
             $img->compositeimage(
                 $tile,
-                \Imagick::COMPOSITE_ADD,
-                $border, $num * $size + $border
+                $border,
+                $num * $size + $border
             );
 
             $scss[] = '@include ' . static::PREFIX_ICON . 'chunk(\'' . $class . '\', ' . $count . ', ' . $num . ');';
@@ -210,6 +222,7 @@ class Sprites
 
     /**
      * Creates new prefix for sprites
+     *
      * @return string
      */
     protected function getNewPrefix()
@@ -233,8 +246,12 @@ class Sprites
 
     protected $providers = [];
 
-    public function addProvider(ProviderInterface $provider)
-    {
+    /**
+     * @param ProviderInterface $provider
+     */
+    public function addProvider(
+        ProviderInterface $provider
+    ) {
         $this->providers[] = $provider;
     }
 }

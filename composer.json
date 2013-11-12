@@ -9,12 +9,14 @@
         }
     ],
     "require":     {
-        "symfony/filesystem": "*",
-        "symfony/finder":     "*",
+        "symfony/framework-bundle": "2.3.*",
 
-        "ext-imagick": "*",
+        "gregwar/image": "*",
 
         "php": ">=5.4"
+    },
+    "require-dev": {
+        "werkint/webapp-bundle": "0.1.x-dev"
     },
     "suggest":     {
         "werkint/webapp-bundle":  "Automatic sprites-mixins file include",
@@ -26,5 +28,12 @@
         "psr-0": {
             "Werkint\\Bundle\\SpritesBundle": ""
         }
-    }
+    },
+    "extra":       {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    },
+
+    "minimum-stability": "dev"
 }
