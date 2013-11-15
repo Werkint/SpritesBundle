@@ -1,9 +1,9 @@
 <?php
 namespace Werkint\Bundle\SpritesBundle\EventListener;
 
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Werkint\Bundle\WebappBundle\Webapp\WebappInterface;
 
 /**
  * ControllerLoader.
@@ -12,47 +12,42 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  */
 class ControllerLoader
 {
-    // -- Services ---------------------------------------
+    protected $config;
+    protected $webapp;
 
-    protected function serviceWebapp()
-    {
-        return $this->container->get('werkint.webapp');
+    /**
+     * @param WebappInterface $webapp
+     * @param array           $config
+     */
+    public function __construct(
+        WebappInterface $webapp = null,
+        array $config
+    ) {
+        $this->webapp = $webapp;
+        $this->config = $config;
     }
 
-    // -- Actions ---------------------------------------
-
-    protected $container;
-
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
-
-    protected function par($name)
-    {
-        return $this->container->getParameter($name);
-    }
-
-    public function initController(FilterControllerEvent $event)
+    /**
+     * @param FilterControllerEvent $event
+     * @return bool
+     */
+    public function onKernelController(FilterControllerEvent $event)
     {
         if ($event->getRequestType() != HttpKernelInterface::MASTER_REQUEST) {
-            return;
+            return false;
         }
 
-        if (!$this->container->has('werkint.webapp')) {
-            return;
+        if (!$this->webapp) {
+            return false;
         }
 
-        $config = $this->par('werkint_sprites');
-        $webapp = $this->serviceWebapp();
+        $this->webapp->getLoader()->blockStart('_root');
 
-        $webapp->getLoader()->blockStart('_root');
+        $this->webapp->attachFile($this->config['styles']);
+        $this->webapp->addVar('sprites-namespace', $this->config['namespace']);
+        $this->webapp->addVar('sprites-path', $this->config['path']);
 
-        $webapp->attachFile($config['styles']);
-        $webapp->addVar('sprites-namespace', $config['namespace']);
-        $webapp->addVar('sprites-path', $config['path']);
-
-        $webapp->getLoader()->blockStart('page');
+        $this->webapp->getLoader()->blockStart('page');
     }
 
 }

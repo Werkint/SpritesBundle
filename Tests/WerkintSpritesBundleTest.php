@@ -1,5 +1,5 @@
 <?php
-namespace Werkint\Bundle\SpritesBundle\Tests\Currency;
+namespace Werkint\Bundle\SpritesBundle\Tests;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Werkint\Bundle\SpritesBundle\WerkintSpritesBundle;
@@ -22,4 +22,5 @@ class WerkintSpritesdBundleTest extends \PHPUnit_Framework_TestCase
         $obj = new WerkintSpritesBundle();
         $obj->build($containerBuilderMock);
     }
+
 }

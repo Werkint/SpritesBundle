@@ -45,6 +45,10 @@ class WerkintSpritesExtensionTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @param array $config
+     * @return ContainerBuilder
+     */
     protected function loadContainer(array $config)
     {
         $container = new ContainerBuilder();
@@ -52,4 +56,5 @@ class WerkintSpritesExtensionTest extends \PHPUnit_Framework_TestCase
         $loader->load([$config], $container);
         return $container;
     }
+
 }

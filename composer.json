@@ -16,12 +16,13 @@
         "php": ">=5.4"
     },
     "require-dev": {
-        "werkint/webapp-bundle": "0.1.x-dev"
+        "werkint/webapp-bundle":  "0.1.x-dev",
+        "werkint/command-bundle": "0.1.x-dev"
     },
     "suggest":     {
         "werkint/webapp-bundle":  "Automatic sprites-mixins file include",
         "werkint/command-bundle": "Support of werkint:compile command",
-        "twig/twig":              "Twig function for sprites display"
+        "twig/twig":              "Twig function for sprites displaying"
     },
     "target-dir":  "Werkint/Bundle/SpritesBundle",
     "autoload":    {

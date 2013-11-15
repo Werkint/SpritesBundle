@@ -15,12 +15,11 @@ class TwigExtension extends AbstractExtension
     const EXT_NAME = 'werkint_sprites';
 
     /**
-     * @param ContainerInterface $cont
+     * @param string $namespace
      */
     public function __construct(
-        ContainerInterface $cont
+        $namespace
     ) {
-        $namespace = $cont->getParameter('werkint_sprites_namespace');
         $this->addFunction('sprite', true, function ($name, $class) use (&$namespace) {
             return '<span class="' . $namespace . ' ' . $namespace . '-' . $name . ' ' . $class . '">' . $class . ' icon</span>';
         });
