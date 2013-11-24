@@ -2,6 +2,7 @@
 namespace Werkint\Bundle\SpritesBundle\Service;
 
 use Gregwar\Image\Image;
+use Gregwar\Image\ImageColor;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Werkint\Bundle\SpritesBundle\Service\Contract\ProviderInterface;
@@ -130,14 +131,20 @@ class Sprites
                 $sizes = array_merge($sizes, $provider->getSizes());
             }
         }
-        $sizes = array_combine($sizes, $sizes);
 
         $num = 0;
         $scss = [];
         foreach ($data as $name => $list) {
             // Sprite size
-            $size = $this->getSize($name, !isset($sizes[$name]) ? null : $sizes[$name]);
-            $scss[] = $this->compileFile($prefix, $name, $list, $size);
+            $size = !isset($sizes[$name]) ? null : $sizes[$name];
+            $size = $this->getSize($name, $size);
+            if (is_array($size)) {
+                $border = $size[1];
+                $size = $size[0];
+            } else {
+                $border = static::BORDER_WIDTH;
+            }
+            $scss[] = $this->compileFile($prefix, $name, $list, $size, $border);
             $num += count($list);
         }
 
@@ -166,24 +173,31 @@ class Sprites
     /**
      * Compiles sprite
      *
-     * @param  string $prefix Path prefix
-     * @param  string $name   Filename/class for sprite
-     * @param  array  $list   Image list
-     * @param  int    $size   Sprite width
+     * @param string $prefix Path prefix
+     * @param string $name   Filename/class for sprite
+     * @param array  $list   Image list
+     * @param int    $size   Sprite width
+     * @param int    $border
+     * @throws \InvalidArgumentException
      * @return string
      */
-    protected function compileFile($prefix, $name, array $list, $size)
+    protected function compileFile($prefix, $name, array $list, $size, $border)
     {
+        if (!$size) {
+            throw new \InvalidArgumentException('Empty size');
+        }
+
         // Sprite path
         $fname = $prefix . '/' . $name;
-        // Tile border and size
-        $border = static::BORDER_WIDTH;
+        // Tile size
         $tileSize = $size - $border * 2;
         // Amount of tiles
         $count = count($list);
 
         // Sprite image
-        $img = new Image(null, $size, $size * $count);
+        // Sprite image
+        $img = new \Imagick();
+        $img->newImage($size, $size * $count, 'transparent', 'png');
 
         // SCSS Header
         $scss = [];
@@ -193,14 +207,14 @@ class Sprites
         // Merging images
         $num = 0;
         foreach ($list as $class => $imgname) {
-            $tile = Image::open($imgname);
-            $tile->forceResize($tileSize, $tileSize);
+            $tile = new \Imagick($imgname);
+            $tile->resizeimage($tileSize, $tileSize, \Imagick::FILTER_CUBIC, 0.9);
 
             // We add each image to the sprite with a border
             $img->compositeimage(
                 $tile,
-                $border,
-                $num * $size + $border
+                \Imagick::COMPOSITE_ADD,
+                $border, $num * $size + $border
             );
 
             $scss[] = '@include ' . static::PREFIX_ICON . 'chunk(\'' . $class . '\', ' . $count . ', ' . $num . ');';
