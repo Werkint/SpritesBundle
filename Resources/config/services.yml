@@ -11,6 +11,7 @@ services:
     werkint.sprites:
         class: Werkint\Bundle\SpritesBundle\Service\Sprites
         arguments:
+            - @event_dispatcher
             - %werkint_sprites%
             - %werkint_sprites_template%
     werkint.sprites.compileprovider:

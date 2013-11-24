@@ -3,6 +3,7 @@ namespace Werkint\Bundle\SpritesBundle\Service;
 
 use Gregwar\Image\Image;
 use Gregwar\Image\ImageColor;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Werkint\Bundle\SpritesBundle\Service\Contract\ProviderInterface;
@@ -27,6 +28,9 @@ class Sprites
     const NAMESPACE_NAME = 'const-sprites-namespace';
     // Should we create global classes for mixins?
     const CREATE_CLASSES = true;
+    const EVENT_PREFIX = 'werkint.sprites.';
+
+    protected $dispatcher;
 
     /**
      * Path to the template
@@ -58,13 +62,16 @@ class Sprites
     protected $sizes;
 
     /**
-     * @param array  $params
-     * @param string $template
+     * @param EventDispatcher $dispatcher
+     * @param array           $params
+     * @param string          $template
      */
     public function __construct(
+        EventDispatcher $dispatcher,
         array $params,
         $template
     ) {
+        $this->dispatcher = $dispatcher;
         $this->template = $template;
         $this->imgDir = $params['dir'];
         $this->imgPath = $params['path'];
@@ -209,6 +216,10 @@ class Sprites
         foreach ($list as $class => $imgname) {
             $tile = new \Imagick($imgname);
             $tile->resizeimage($tileSize, $tileSize, \Imagick::FILTER_CUBIC, 0.9);
+            $this->dispatcher->dispatch(
+                static::EVENT_PREFIX . 'tile',
+                new Event\TileProcessEvent($tile, $name, $imgname)
+            );
 
             // We add each image to the sprite with a border
             $img->compositeimage(
@@ -224,6 +235,10 @@ class Sprites
         // SCSS Footer
         $scss[] = '}';
         $scss = join("\n", $scss);
+        $this->dispatcher->dispatch(
+            static::EVENT_PREFIX . 'sprite',
+            new Event\SpriteProcessEvent($img, $name, $scss)
+        );
 
         // Writing image
         $filename = $this->imgDir . '/' . $fname . '.png';
