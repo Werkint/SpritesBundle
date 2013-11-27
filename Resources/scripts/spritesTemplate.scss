@@ -1,8 +1,20 @@
-@mixin sprites-icon-chunk($class: "", $total: 0, $pos: 0) {
+@mixin sprites-icon-chunk($class: "", $total: 0, $pos: 0, $type) {
   $pos = 100 / ($total - 1) * $pos;
   $pos = "#{$pos}%";
-  &.#{$class} {
-    background-position: 0 #{$pos};
+  @if $type == 'general' {
+    &.#{$class} {
+      background-position: 0 #{$pos};
+    }
+  }
+  @if $type == 'before' {
+    &.#{$class}::before {
+      background-position: 0 #{$pos};
+    }
+  }
+  @if $type == 'after' {
+    &.#{$class}::after {
+      background-position: 0 #{$pos};
+    }
   }
 }
 @mixin sprites-icon-general-full($filename) {
@@ -10,8 +22,28 @@
   background: url("#{$filename}") no-repeat transparent;
   background-size: 100% auto;
 }
-@mixin sprites-icon-general($filename) {
-  @include sprites-icon-general-full("#{$const-sprites-path}/#{$filename}.png");
+@mixin sprites-icon-general($filename, $type) {
+  @if $type == 'general' {
+    @include sprites-icon-general-full("#{$const-sprites-path}/#{$filename}.png");
+  }
+  @if $type == 'before' {
+    &::before {
+      content: "";
+      height: 1.2em;
+      width: 1.2em;
+      vertical-align: middle;
+      @include sprites-icon-general-full("#{$const-sprites-path}/#{$filename}.png");
+    }
+  }
+  @if $type == 'after' {
+    &::after {
+      content: "";
+      height: 1.2em;
+      width: 1.2em;
+      vertical-align: middle;
+      @include sprites-icon-general-full("#{$const-sprites-path}/#{$filename}.png");
+    }
+  }
 }
 .#{$const-sprites-namespace} {
   height: 1.2em;

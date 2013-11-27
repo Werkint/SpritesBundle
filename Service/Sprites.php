@@ -208,8 +208,8 @@ class Sprites
 
         // SCSS Header
         $scss = [];
-        $scss[] = '@mixin ' . static::PREFIX_SPRITE . $name . ' {';
-        $scss[] = '@include ' . static::PREFIX_ICON . 'general(\'' . $fname . '\');';
+        $scss[] = '@mixin ' . static::PREFIX_SPRITE . $name . '($type: \'general\') {';
+        $scss[] = '@include ' . static::PREFIX_ICON . 'general(\'' . $fname . '\', $type);';
 
         // Merging images
         $num = 0;
@@ -228,7 +228,7 @@ class Sprites
                 $border, $num * $size + $border
             );
 
-            $scss[] = '@include ' . static::PREFIX_ICON . 'chunk(\'' . $class . '\', ' . $count . ', ' . $num . ');';
+            $scss[] = '@include ' . static::PREFIX_ICON . 'chunk(\'' . $class . '\', ' . $count . ', ' . $num . ', $type);';
             $num++;
         }
 
