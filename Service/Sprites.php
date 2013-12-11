@@ -3,7 +3,7 @@ namespace Werkint\Bundle\SpritesBundle\Service;
 
 use Gregwar\Image\Image;
 use Gregwar\Image\ImageColor;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Werkint\Bundle\SpritesBundle\Service\Contract\ProviderInterface;
@@ -62,12 +62,12 @@ class Sprites
     protected $sizes;
 
     /**
-     * @param EventDispatcher $dispatcher
-     * @param array           $params
-     * @param string          $template
+     * @param EventDispatcherInterface $dispatcher
+     * @param array                    $params
+     * @param string                   $template
      */
     public function __construct(
-        EventDispatcher $dispatcher,
+        EventDispatcherInterface $dispatcher,
         array $params,
         $template
     ) {
