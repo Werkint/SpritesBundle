@@ -25,7 +25,7 @@ class Sprites
     // Prefix for each sprite's mixin
     const PREFIX_SPRITE = 'sprite-';
     // Prefix for the whole thing
-    const NAMESPACE_NAME = 'const-sprites-namespace';
+    const NAMESPACE_NAME = 'webapp-sprites-namespace';
     // Should we create global classes for mixins?
     const CREATE_CLASSES = true;
     const EVENT_PREFIX = 'werkint.sprites.';

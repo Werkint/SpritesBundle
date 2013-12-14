@@ -24,7 +24,7 @@
 }
 @mixin sprites-icon-general($filename, $type) {
   @if $type == 'general' {
-    @include sprites-icon-general-full("#{$const-sprites-path}/#{$filename}.png");
+    @include sprites-icon-general-full("#{$webapp-sprites-path}/#{$filename}.png");
   }
   @if $type == 'before' {
     &::before {
@@ -32,7 +32,7 @@
       height: 1.2em;
       width: 1.2em;
       vertical-align: middle;
-      @include sprites-icon-general-full("#{$const-sprites-path}/#{$filename}.png");
+      @include sprites-icon-general-full("#{$webapp-sprites-path}/#{$filename}.png");
     }
   }
   @if $type == 'after' {
@@ -41,11 +41,11 @@
       height: 1.2em;
       width: 1.2em;
       vertical-align: middle;
-      @include sprites-icon-general-full("#{$const-sprites-path}/#{$filename}.png");
+      @include sprites-icon-general-full("#{$webapp-sprites-path}/#{$filename}.png");
     }
   }
 }
-.#{$const-sprites-namespace} {
+.#{$webapp-sprites-namespace} {
   height: 1.2em;
   width: 1.2em;
   text-indent: -99999em;

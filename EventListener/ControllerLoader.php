@@ -44,8 +44,8 @@ class ControllerLoader
         $this->webapp->getLoader()->blockStart('_root');
 
         $this->webapp->attachFile($this->config['styles']);
-        $this->webapp->addVar('sprites-namespace', $this->config['namespace']);
-        $this->webapp->addVar('sprites-path', $this->config['path']);
+        $this->webapp->addVar('webapp-sprites-namespace', $this->config['namespace']);
+        $this->webapp->addVar('webapp-sprites-path', $this->config['path']);
 
         $this->webapp->getLoader()->blockStart('page');
     }
