@@ -1,19 +1,23 @@
-@mixin sprites-icon-chunk($class: "", $total: 0, $pos: 0, $type) {
+@mixin sprites-icon-chunk($class: "", $total: 0, $pos: 0, $type, $forceClass: false) {
   $pos = 100 / ($total - 1) * $pos;
   $pos = "#{$pos}%";
-  @if $type == 'general' {
-    &.#{$class} {
-      background-position: 0 #{$pos};
+  @if $forceClass {
+    background-position: 0 #{$pos};
+  } @else {
+    @if $type == 'general' {
+      &.#{$class} {
+        background-position: 0 #{$pos};
+      }
     }
-  }
-  @if $type == 'before' {
-    &.#{$class}::before {
-      background-position: 0 #{$pos};
+    @if $type == 'before' {
+      &.#{$class}::before {
+        background-position: 0 #{$pos};
+      }
     }
-  }
-  @if $type == 'after' {
-    &.#{$class}::after {
-      background-position: 0 #{$pos};
+    @if $type == 'after' {
+      &.#{$class}::after {
+        background-position: 0 #{$pos};
+      }
     }
   }
 }
@@ -42,6 +46,17 @@
       width: 1.2em;
       vertical-align: middle;
       @include sprites-icon-general-full("#{$webapp-sprites-path}/#{$filename}.png");
+    }
+  }
+}
+// Utility mixin for defining sprites
+@mixin sprites-sprite-generic($icons, $name, $type, $forceClass) {
+  @include sprites-icon-general($name, $type);
+  $num: length($icons);
+  @for $i from 1 through $num {
+    $icon: nth($icons, $i);
+    @if (not $forceClass) or ($forceClass == $icon) {
+      @include sprites-icon-chunk($icon, $num, $i - 1, $type, $forceClass == $icon);
     }
   }
 }

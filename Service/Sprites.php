@@ -208,11 +208,11 @@ class Sprites
 
         // SCSS Header
         $scss = [];
-        $scss[] = '@mixin ' . static::PREFIX_SPRITE . $name . '($type: \'general\') {';
-        $scss[] = '@include ' . static::PREFIX_ICON . 'general(\'' . $fname . '\', $type);';
+        $scss[] = '@mixin ' . static::PREFIX_SPRITE . $name . '($type: \'general\', $forceClass: false) {';
 
         // Merging images
         $num = 0;
+        $classes = [];
         foreach ($list as $class => $imgname) {
             $tile = new \Imagick($imgname);
             $tile->resizeimage($tileSize, $tileSize, \Imagick::FILTER_CUBIC, 0.9);
@@ -228,9 +228,11 @@ class Sprites
                 $border, $num * $size + $border
             );
 
-            $scss[] = '@include ' . static::PREFIX_ICON . 'chunk(\'' . $class . '\', ' . $count . ', ' . $num . ', $type);';
+            $classes[] = $class;
             $num++;
         }
+        $scss[] = '  $icons: ' . join(' ', $classes) . ';';
+        $scss[] = '  @include sprites-sprite-generic($icons, \'' . $fname . '\', $type, $forceClass);';
 
         // SCSS Footer
         $scss[] = '}';
