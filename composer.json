@@ -24,10 +24,9 @@
         "werkint/command-bundle": "Support of werkint:compile command",
         "twig/twig":              "Twig function for sprites displaying"
     },
-    "target-dir":  "Werkint/Bundle/SpritesBundle",
     "autoload":    {
-        "psr-0": {
-            "Werkint\\Bundle\\SpritesBundle": ""
+        "psr-4": {
+            "Werkint\\Bundle\\SpritesBundle\\": "src/"
         }
     },
     "extra":       {
