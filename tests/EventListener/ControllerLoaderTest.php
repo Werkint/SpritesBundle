@@ -21,8 +21,7 @@ class ControllerLoaderTest extends \PHPUnit_Framework_TestCase
             'Werkint\Bundle\WebappBundle\Webapp\ScriptLoader'
         );
         $webapp = $this->getMock(
-            'Werkint\Bundle\WebappBundle\Webapp\WebappInterface',
-            ['attachFile', 'addVar', 'getLoader']
+            'Werkint\Bundle\WebappBundle\Webapp\WebappInterface'
         );
         $webapp
             ->expects($this->any())

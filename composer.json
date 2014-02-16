@@ -26,7 +26,8 @@
     },
     "autoload":    {
         "psr-4": {
-            "Werkint\\Bundle\\SpritesBundle\\": "src/"
+            "Werkint\\Bundle\\SpritesBundle\\": "src/",
+            "Werkint\\Bundle\\SpritesBundle\\Tests\\": "tests/"
         }
     },
     "extra":       {

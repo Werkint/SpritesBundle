@@ -14,6 +14,11 @@ class SpriteProcessEvent extends Event
     protected $spriteName;
     protected $scss;
 
+    /**
+     * @param \Imagick $image
+     * @param string $spriteName
+     * @param string $scss
+     */
     public function __construct(
         \Imagick $image,
         $spriteName,
@@ -21,7 +26,7 @@ class SpriteProcessEvent extends Event
     ) {
         $this->image = $image;
         $this->spriteName = $spriteName;
-        $this->scss = $scss;
+        $this->scss = &$scss;
     }
 
     // -- Getters ---------------------------------------

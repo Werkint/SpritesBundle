@@ -14,6 +14,11 @@ class TileProcessEvent extends Event
     protected $spriteName;
     protected $tileName;
 
+    /**
+     * @param \Imagick $image
+     * @param string $spriteName
+     * @param string $tileName
+     */
     public function __construct(
         \Imagick $image,
         $spriteName,
