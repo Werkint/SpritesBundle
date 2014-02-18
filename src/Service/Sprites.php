@@ -3,6 +3,7 @@ namespace Werkint\Bundle\SpritesBundle\Service;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Werkint\Bundle\SpritesBundle\Service\Contract\ProviderInterface;
 use Werkint\Bundle\SpritesBundle\Service\Contract\SizeProviderInterface;
 
