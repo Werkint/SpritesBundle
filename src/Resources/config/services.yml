@@ -6,7 +6,7 @@ services:
             - @werkint.webapp
             - %werkint_sprites%
         tags:
-            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelController }
 
     werkint.sprites:
         class: Werkint\Bundle\SpritesBundle\Service\Sprites

@@ -1,7 +1,7 @@
 <?php
 namespace Werkint\Bundle\SpritesBundle\EventListener;
 
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Werkint\Bundle\WebappBundle\Webapp\WebappInterface;
 
@@ -27,15 +27,18 @@ class ControllerLoader
         $this->config = $config;
     }
 
+    protected $init = false;
+
     /**
-     * @param FilterControllerEvent $event
+     * @param GetResponseEvent $event
      * @return bool
      */
-    public function onKernelController(FilterControllerEvent $event)
+    public function onKernelController(GetResponseEvent $event)
     {
-        if ($event->getRequestType() != HttpKernelInterface::MASTER_REQUEST) {
+        if ($this->init) {
             return false;
         }
+        $this->init = true;
 
         if (!$this->webapp) {
             return false;
