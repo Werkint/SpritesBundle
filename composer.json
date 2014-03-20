@@ -16,17 +16,17 @@
         "php": ">=5.4"
     },
     "require-dev": {
-        "werkint/webapp-bundle":  "0.1.x-dev",
-        "werkint/command-bundle": "0.1.x-dev"
+        "werkint/webapp-bundle":          "0.1.x-dev",
+        "werkint/framework-extra-bundle": "0.1.x-dev"
     },
     "suggest":     {
-        "werkint/webapp-bundle":  "Automatic sprites-mixins file include",
-        "werkint/command-bundle": "Support of werkint:compile command",
-        "twig/twig":              "Twig function for sprites displaying"
+        "werkint/webapp-bundle":          "Automatic sprites-mixins file include",
+        "werkint/framework-extra-bundle": "Support of werkint:compile command",
+        "twig/twig":                      "Twig function for sprites displaying"
     },
     "autoload":    {
         "psr-4": {
-            "Werkint\\Bundle\\SpritesBundle\\": "src/",
+            "Werkint\\Bundle\\SpritesBundle\\":        "src/",
             "Werkint\\Bundle\\SpritesBundle\\Tests\\": "tests/"
         }
     },
