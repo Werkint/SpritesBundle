@@ -21,6 +21,8 @@ class WerkintSpritesExtension extends AbstractExtension
         $namespace
     ) {
         $this->namespace = $namespace;
+
+        parent::__construct();
     }
 
     /**

@@ -2,7 +2,7 @@
 namespace Werkint\Bundle\SpritesBundle\Tests\Service;
 
 use Symfony\Component\Console\Output\NullOutput;
-use Werkint\Bundle\CommandBundle\Command\CompileCommand;
+use Werkint\Bundle\FrameworkExtraBundle\Command\CompileCommand;
 use Werkint\Bundle\SpritesBundle\Service\CompileProvider;
 
 /**

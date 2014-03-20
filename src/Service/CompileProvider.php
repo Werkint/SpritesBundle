@@ -3,7 +3,7 @@ namespace Werkint\Bundle\SpritesBundle\Service;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Output\OutputInterface;
-use Werkint\Bundle\CommandBundle\Service\Contract\CompileProviderInterface;
+use Werkint\Bundle\FrameworkExtraBundle\Service\Processor\Compile\CompileProviderInterface;
 
 /**
  * CompileProvider.
