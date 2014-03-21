@@ -1,6 +1,6 @@
-@mixin sprites-icon-chunk($class: "", $total: 0, $pos: 0, $type, $forceClass: false) {
-  $pos = 100 / max($total - 1, 1) * $pos;
-  $pos = "#{$pos}%";
+@mixin sprites-icon-chunk($class: "", $total: 0, $pos: 0, $type: 'general', $forceClass: false) {
+  $pos: 100 / max($total - 1, 1) * $pos;
+  $pos: "#{$pos}%";
   @if $type == 'general' {
     @if $forceClass {
       & {
