@@ -1,5 +1,6 @@
 {
     "name":        "werkint/sprites-bundle",
+    "type":        "symfony-bundle",
     "description": "Sprites module",
     "license":     "GPL-3.0+",
     "authors":     [
@@ -13,7 +14,7 @@
 
         "ext-imagick": "*",
 
-        "php": ">=5.4"
+        "php": ">=5.5"
     },
     "require-dev": {
         "werkint/webapp-bundle":          "0.1.x-dev",
