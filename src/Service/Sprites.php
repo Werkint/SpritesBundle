@@ -145,11 +145,13 @@ class Sprites
             $size = $this->getSize($name, $size);
             if (is_array($size)) {
                 $border = $size[1];
-                $size = $size[0];
+                $sizeH = isset($size[2]) ? $size[2] : $size[0];
+                $sizeW = $size[0];
             } else {
                 $border = static::BORDER_WIDTH;
+                $sizeH = $sizeW = $size;
             }
-            $scss[] = $this->compileFile($prefix, $name, $list, $size, $border);
+            $scss[] = $this->compileFile($prefix, $name, $list, [$sizeW, $sizeH], $border);
             $num += count($list);
         }
 
@@ -178,31 +180,34 @@ class Sprites
     /**
      * Compiles sprite
      *
-     * @param string $prefix Path prefix
-     * @param string $name   Filename/class for sprite
-     * @param array  $list   Image list
-     * @param int    $size   Sprite width
-     * @param int    $border
+     * @param string      $prefix Path prefix
+     * @param string      $name   Filename/class for sprite
+     * @param array       $list   Image list
+     * @param array|int[] $size   Sprite 0=>width/1=>height
+     * @param int         $border
      * @throws \InvalidArgumentException
      * @return string
      */
-    protected function compileFile($prefix, $name, array $list, $size, $border)
+    protected function compileFile($prefix, $name, array $list, array $size, $border)
     {
-        if (!$size) {
+        if (!($size[0] && $size[1])) {
             throw new \InvalidArgumentException('Empty size');
         }
 
         // Sprite path
         $fname = $prefix . '/' . $name;
         // Tile size
-        $tileSize = $size - $border * 2;
+        $tileSizeW = $size[0] - $border * 2;
+        $tileSizeH = $size[1] - $border * 2;
+        $tileSizeP = $tileSizeH / $tileSizeW;
+
         // Amount of tiles
         $count = count($list);
 
         // Sprite image
         // Sprite image
         $img = new \Imagick();
-        $img->newImage($size, $size * $count, 'transparent', 'png');
+        $img->newImage($size[0], $size[1] * $count, 'transparent', 'png');
 
         // SCSS Header
         $scss = [];
@@ -213,17 +218,32 @@ class Sprites
         $classes = [];
         foreach ($list as $class => $imgname) {
             $tile = new \Imagick($imgname);
-            $tile->resizeimage($tileSize, $tileSize, \Imagick::FILTER_CUBIC, 0.9);
+
+            $deltaX = $border;
+            $deltaY = $num * $size[1] + $border;
+            $tmpSizeW = $tile->getimagewidth();
+            $tmpSizeH = $tile->getimageheight();
+            $tmpSizeP = $tmpSizeH / $tmpSizeW;
+            if ($tmpSizeP > $tileSizeP) {
+                $tmpSizeH = $tileSizeH;
+                $tmpSizeW = $tileSizeH / $tmpSizeP;
+                $deltaX += ($tileSizeW - $tmpSizeW) / 2;
+            } else {
+                $tmpSizeW = $tileSizeW;
+                $tmpSizeH = $tileSizeW * $tmpSizeP;
+                $deltaY += ($tileSizeH - $tmpSizeH) / 2;
+            }
+
+            $tile->resizeimage($tmpSizeW, $tmpSizeH, \Imagick::FILTER_CUBIC, 0.9);
             $this->dispatcher->dispatch(
                 static::EVENT_PREFIX . 'tile',
                 new Event\TileProcessEvent($tile, $name, $imgname)
             );
 
+
             // We add each image to the sprite with a border
             $img->compositeimage(
-                $tile,
-                \Imagick::COMPOSITE_ADD,
-                $border, $num * $size + $border
+                $tile, \Imagick::COMPOSITE_ADD, $deltaX, $deltaY
             );
 
             $classes[] = $class;
