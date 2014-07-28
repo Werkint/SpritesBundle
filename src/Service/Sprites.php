@@ -234,7 +234,7 @@ class Sprites
                 $deltaY += ($tileSizeH - $tmpSizeH) / 2;
             }
 
-            $tile->resizeimage($tmpSizeW, $tmpSizeH, \Imagick::FILTER_CUBIC, 0.9);
+            $tile->resizeimage($tmpSizeW, $tmpSizeH, \Imagick::FILTER_TRIANGLE, .9);
             $this->dispatcher->dispatch(
                 static::EVENT_PREFIX . 'tile',
                 new Event\TileProcessEvent($tile, $name, $imgname)
@@ -243,7 +243,7 @@ class Sprites
 
             // We add each image to the sprite with a border
             $img->compositeimage(
-                $tile, \Imagick::COMPOSITE_ADD, $deltaX, $deltaY
+                $tile, \Imagick::COMPOSITE_BLEND, $deltaX, $deltaY
             );
 
             $classes[] = $class;
