@@ -19,7 +19,7 @@ services:
         arguments:
             - @werkint.sprites
         tags:
-            - { name: werkint.compile.provider, class: werkint.sprites }
+            - { name: werkint_command.compile, class: werkint.sprites }
     # Twig
     werkint.sprites.twigappextension:
         class: Werkint\Bundle\SpritesBundle\Service\Twig\WerkintSpritesExtension
